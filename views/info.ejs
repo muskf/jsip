@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>激活成功</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    p {
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    #targetAddress {
+      color: #007bff;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    #copyButton {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    #copyButton:hover {
+      background-color: #0056b3;
+    }
+
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>产品已激活</h1>
+    <p>加速IP已经激活,请通过以下地址进入游戏:</p>
+    <p id="targetAddress">az.iqach.top</p>
+    <button id="copyButton" onclick="copyToClipboard()">复制地址</button>
+  </div>
+
+  <script>
+    function copyToClipboard() {
+      const targetAddress = document.getElementById('targetAddress').innerText;
+      navigator.clipboard.writeText(targetAddress)
+        .then(() => {
+          alert('已将地址复制到剪贴板!');
+        })
+        .catch(err => {
+          console.error('复制失败: ', err);
+        });
+    }
+  </script>
+</body>
+</html>

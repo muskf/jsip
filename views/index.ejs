@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>激活加速IP</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-image: url('https://source.unsplash.com/1600x900/?technology');
+      background-size: cover;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      transition: filter 0.3s ease;
+    }
+    .container {
+      background-color: rgba(255, 255, 255, 0.8);
+      border-radius: 20px;
+      padding: 20px;
+      margin-top: 100px;
+      box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+    .container:hover {
+      box-shadow: 0px 20px 40px rgba(0, 0, 0, 0.2);
+      transform: translateY(-10px);
+    }
+    .form-control {
+      border-radius: 10px;
+      transition: filter 0.3s ease;
+    }
+    .btn-primary {
+      border-radius: 10px;
+      box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h3 class="text-center mb-4">激活产品</h3>
+    <form action="/activate" method="post">
+      <div class="form-group">
+        <input type="text" class="form-control" id="username" name="username" placeholder="MC用户名" required>
+      </div>
+      <div class="form-group">
+        <input type="text" class="form-control" id="inviteCode" name="inviteCode" placeholder="邀请码" required>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">激活</button>
+    </form>
+    <h1>
+        FRIENDS ONLY
+    </h1>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
