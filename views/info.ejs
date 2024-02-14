@@ -60,6 +60,7 @@
         transform: translateY(0);
       }
     }
+
   </style>
 </head>
 <body>
@@ -69,10 +70,12 @@
     <p id="targetAddress">az.iqach.top</p>
     <button id="copyButton" onclick="copyToClipboard()">复制地址</button>
   </div>
+  <div class="status">
+  </div>
 
   <script>
     function copyToClipboard() {
-      const targetAddress = document.getElementById('targetAddress').innerText;
+      var targetAddress = document.getElementById('targetAddress').innerText;
       navigator.clipboard.writeText(targetAddress)
         .then(() => {
           alert('已将地址复制到剪贴板!');

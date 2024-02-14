@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs');
+const axios = require('axios');
 const { body, validationResult } = require('express-validator');
 
 const app = express();
@@ -20,8 +21,7 @@ app.use((req, res, next) => {
       console.log(`${new Date().toISOString()} - ${req.method} ${req.path} - Response Status: ${res.statusCode} - Response Body: ${res.statusMessage}`);
     });
     next();
-  });
-  
+});
 
 // 首页路由
 app.get('/', (req, res) => {
@@ -39,10 +39,10 @@ if (!fs.existsSync(inviteCodesFile)) {
 let inviteCodes = fs.readFileSync(inviteCodesFile, 'utf8').split('\n');
 
 // 处理表单提交
-app.post('/activate', 
+app.post('/activate',
   body('username').trim().escape(),
   body('inviteCode').trim().escape(),
-  (req, res) => {
+  async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -55,25 +55,34 @@ app.post('/activate',
 
     // 校验邀请码
     if (inviteCodes[inviteCode] === false) {
-      // 从 JSON 文件中读取数据
-      const filePath = './ZBProxy.json';
-      let jsonData = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+      try {
+        // 查询真实的 Minecraft 用户名
+        const response = await axios.get(`https://api.mojang.com/users/profiles/minecraft/${username}`);
+        const realUsername = response.data.name;
 
-      // 检查是否存在相同的用户名
-      if (jsonData.Lists.dcbb.includes(username)) {
-        return res.send('<h1>此用户已经激活！</h1>');
+        // 从 JSON 文件中读取数据
+        const filePath = './ZBProxy.json';
+        let jsonData = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+
+        // 检查是否存在相同的用户名
+        if (jsonData.Lists.dcbb.includes(realUsername)) {
+          return res.send('<h1>此用户已经激活！</h1>');
+        }
+
+        // 更新 JSON 文件
+        jsonData.Lists.dcbb.push(realUsername);
+        fs.writeFileSync(filePath, JSON.stringify(jsonData, null, 2));
+
+        // 更新邀请码文件，将邀请码标记为已使用
+        inviteCodes[inviteCode] = true;
+        fs.writeFileSync('invite_codes.json', JSON.stringify(inviteCodes, null, 2));
+
+        // 渲染信息页面
+        res.render('info', { targetAddress: jsonData.Services[0].TargetAddress });
+      } catch (error) {
+        console.error(error);
+        res.send('<h1>无法查询真实的 Minecraft 用户名！</h1>');
       }
-
-      // 更新 JSON 文件
-      jsonData.Lists.dcbb.push(username);
-      fs.writeFileSync(filePath, JSON.stringify(jsonData, null, 2));
-
-      // 更新邀请码文件，将邀请码标记为已使用
-      inviteCodes[inviteCode] = true;
-      fs.writeFileSync('invite_codes.json', JSON.stringify(inviteCodes, null, 2));
-
-      // 渲染信息页面
-      res.render('info', { targetAddress: jsonData.Services[0].TargetAddress });
     } else {
       res.send('<h1>邀请码错误或已经被使用！</h1>');
     }
